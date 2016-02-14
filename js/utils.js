@@ -10,4 +10,11 @@ var Utils = function() {
         if (playerPhase == "SETUP") actionFlag = true;
         location.reload(true);
     };
+
+    this.playerTabClick = function() {
+
+        for (var i = 0; i < ptab.length; i++) {
+
+        }
+    };
 };

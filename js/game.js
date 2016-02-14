@@ -50,43 +50,49 @@ gameState.prototype = {
         var styleBlack = { font: "16px Arial", fill: "#000000" };
 
         board = new Board(gameId);
-        log += "Board loaded\n";
+        log = game.add.text(1, 701, "Loading\nBoard Loaded\n", styleWhite);
+        log.setTextBounds(16, 16, 768, 568);
         player = new Player(gameId);
         utils = new Utils();
 
-        boardSprite = game.add.sprite(0, 0, 'board');
+        boardSprite = game.add.button(0, 0, 'board');
 
-        var ap = game.make.sprite(70, 2, 'circles', 0);
         ptab = [];
 
         player.then(function(response) {
-            log += response;
+            log.setText(log.text + response);
 
             for (var i = 0; i < 4; i++) {
-                ptab[i] = game.add.button(685 + (95 * i), 18, 'tabs', playerTabClick(playerNum[i]), this, 1, 2, 0);
-                ptab[i].addChild(game.make.text(5, 2, playerName[i], styleBlack));
-                if (playerActive == playerNum[i]) ptab[i].addChild(ap);
+                ptab[i] = new Tab(i, playerName[i]);
+                if (playerActive == playerNum[i]) ptab[i].makeActive();
+                //ptab[i] = game.add.button(685 + (95 * i), 18, 'tabs', utils.playerTabClick, this, 1, 2, 0);
+                //ptab[i].name = playerName[i];
+                //ptab[i].addChild(game.make.text(5, 2, playerName[i], styleBlack));
+                //if (playerActive == playerNum[i]) ptab[i].addChild(ap);
             }
 
-            var eButton = game.add.button(607, 647, 'tabs', endTurn(), this, 1, 2, 0);
+            var eButton = game.add.button(607, 647, 'tabs', endTurn, this, 1, 2, 0);
             eButton.addChild(game.make.text(5, 3, "End Turn", styleBlack));
-            var rButton = game.add.button(223, 647, 'tabs', function() { utils.resetTurn(); }, this, 1, 2, 0);
+            var rButton = game.add.button(223, 647, 'tabs', utils.resetTurn, this, 1, 2, 0);
             rButton.addChild(game.make.text(5, 3, "Reset Turn", styleBlack));
 
+            var resp = "";
             if (playerActive == playerId) {
-                log += "It is your turn\n";
+                resp += "It is your turn\n";
                 activePlayer = true;
             } else {
-                log += "You are not the active player";
+                resp += "You are not the active player\n";
             }
 
-            return log;
+            return resp;
 
         }).then(function(response) {
-            var text = game.add.text(1, 701, response, styleWhite);
-            text.setTextBounds(16, 16, 768, 568);
+            log.setText(log.text + response);
 
-            if (activePlayer && playerPhase == "SETUP") board.pickBuilding(playerId);
+            if (activePlayer && playerPhase == "SETUP") {
+                log.setText(log.text + "Choose an available building to own\n");
+                board.pickBuilding();
+            }
         });
 
     },
@@ -97,6 +103,7 @@ gameState.prototype = {
                 drawBuildings[i].lock();
             }
             actionFlag = false;
+            log.setText(log.text + "Building selected. End your turn\n");
         }
 
     },
@@ -104,10 +111,6 @@ gameState.prototype = {
     render: function() {
     }
 };
-
-function playerTabClick (pnum) {
-
-}
 
 function endTurn() {}
 
