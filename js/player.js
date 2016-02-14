@@ -2,6 +2,7 @@ var playerNum = [];
 var playerName = [];
 var playerActive = "";
 var playerPhase = "";
+var playerColor = [];
 
 var Player = function (gameId) {
 
@@ -18,6 +19,10 @@ var Player = function (gameId) {
             playerName[2] = data.p3Name;
             playerName[3] = data.p4Name;
             playerPhase = data.state;
+            playerColor[0] = data.colorOne;
+            playerColor[1] = data.colorTwo;
+            playerColor[2] = data.colorThree;
+            playerColor[3] = data.colorFour;
             resolve("Players Loaded\n");
         })
             .fail(function () {

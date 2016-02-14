@@ -20,6 +20,15 @@ var Tab = function(i, name) {
             if (i != tab.index) ptab[i].reset();
             tab.sprite.setFrames(0, 0, 0);
         }
+        playerInfo.update(tab.index);
+    };
+
+    this.select = function() {
+        for (var i = 0; i < ptab.length; i++) {
+            if (i != tab.index) ptab[i].reset();
+            tab.sprite.setFrames(0, 0, 0);
+        }
+        playerInfo.update(tab.index);
     };
 
     this.reset = function() {

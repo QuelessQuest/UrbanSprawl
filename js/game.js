@@ -18,6 +18,8 @@ var board;
 var boardSprite;
 var ptab;
 var utils;
+var clickedIndex;
+var playerInfo;
 
 var gameState = function(game){
     this.board;
@@ -62,13 +64,15 @@ gameState.prototype = {
         player.then(function(response) {
             log.setText(log.text + response);
 
+            playerInfo = new PlayerInfo();
+
             for (var i = 0; i < 4; i++) {
                 ptab[i] = new Tab(i, playerName[i]);
-                if (playerActive == playerNum[i]) ptab[i].makeActive();
-                //ptab[i] = game.add.button(685 + (95 * i), 18, 'tabs', utils.playerTabClick, this, 1, 2, 0);
-                //ptab[i].name = playerName[i];
-                //ptab[i].addChild(game.make.text(5, 2, playerName[i], styleBlack));
-                //if (playerActive == playerNum[i]) ptab[i].addChild(ap);
+                if (playerActive == playerNum[i]) {
+                    ptab[i].makeActive();
+                    clickedIndex = i;
+                    ptab[i].select();
+                }
             }
 
             var eButton = game.add.button(607, 647, 'tabs', endTurn, this, 1, 2, 0);
