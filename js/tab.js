@@ -12,7 +12,7 @@ var Tab = function(i, name) {
     };
 
     this.makeActive = function() {
-        tab.sprite.addChild(game.make.button(70, 2, 'circles', 0));
+        tab.sprite.addChild(game.make.sprite(70, 2, 'circles', 0));
     };
 
     var click = function() {
@@ -24,6 +24,10 @@ var Tab = function(i, name) {
 
     this.reset = function() {
         tab.sprite.setFrames(1, 2, 0);
+    };
+
+    this.destroy = function() {
+        tab.sprite.destroy();
     };
 
     init();

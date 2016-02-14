@@ -55,8 +55,8 @@ var Board = function (gameId) {
     this.pickBuilding = function() {
         for (var i = 0; i < drawBuildings.length; i++) {
             if (drawBuildings[i].owner == 0) {
-                drawBuildings[i].button.inputEnabled = true;
-                drawBuildings[i].button.input.useHandCursor = true;
+                drawBuildings[i].sprite.inputEnabled = true;
+                drawBuildings[i].sprite.input.useHandCursor = true;
             }
         }
     };

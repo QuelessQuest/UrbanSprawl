@@ -12,9 +12,5 @@ var Utils = function() {
     };
 
     this.playerTabClick = function() {
-
-        for (var i = 0; i < ptab.length; i++) {
-
-        }
     };
 };
