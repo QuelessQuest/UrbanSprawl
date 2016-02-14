@@ -67,13 +67,22 @@ gameState.prototype = {
             playerInfo = new PlayerInfo();
 
             for (var i = 0; i < 4; i++) {
+                ptab[i] = new Tab(i, playerStuff[i].name);
+                if (playerActive == playerStuff[i].id) {
+                    ptab[i].makeActive();
+                    clickedIndex = i;
+                    ptab[i].select();
+                }
+            }
+
+/*            for (var i = 0; i < 4; i++) {
                 ptab[i] = new Tab(i, playerName[i]);
                 if (playerActive == playerNum[i]) {
                     ptab[i].makeActive();
                     clickedIndex = i;
                     ptab[i].select();
                 }
-            }
+            }*/
 
             var eButton = game.add.button(607, 647, 'tabs', endTurn, this, 1, 2, 0);
             eButton.addChild(game.make.text(5, 3, "End Turn", styleBlack));

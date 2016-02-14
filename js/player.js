@@ -1,28 +1,25 @@
-var playerNum = [];
-var playerName = [];
+var playerStuff = [];
+//var playerName = [];
 var playerActive = "";
 var playerPhase = "";
-var playerColor = [];
+//var playerColor = [];
 
 var Player = function (gameId) {
 
     return new Promise(function(resolve, reject) {
 
         $.get("http://localhost:8111/game/load/1/Players", function (data) {
-            playerNum[0] = data.playerOne;
-            playerNum[1] = data.playerTwo;
-            playerNum[2] = data.playerThree;
-            playerNum[3] = data.playerFour;
+            /*
+             {"activePlayer":1,
+             "phase":"SETUP",
+             "players":[{"name":"Larry","id":1,"color":0,"wealth":0,"prestige":0,"vocations":"0","cards":"0","politicians":"0","favor":0},
+             {"name":"John","id":2,"color":1,"wealth":0,"prestige":0,"vocations":"0","cards":"0","politicians":"0","favor":0},
+             {"name":"Mark","id":3,"color":2,"wealth":0,"prestige":0,"vocations":"0","cards":"0","politicians":"0","favor":0},
+             {"name":"JD","id":4,"color":3,"wealth":0,"prestige":0,"vocations":"0","cards":"0","politicians":"0","favor":0}]}
+             */
             playerActive = data.activePlayer;
-            playerName[0] = data.p1Name;
-            playerName[1] = data.p2Name;
-            playerName[2] = data.p3Name;
-            playerName[3] = data.p4Name;
-            playerPhase = data.state;
-            playerColor[0] = data.colorOne;
-            playerColor[1] = data.colorTwo;
-            playerColor[2] = data.colorThree;
-            playerColor[3] = data.colorFour;
+            playerPhase = data.phase;
+            playerStuff = data.players;
             resolve("Players Loaded\n");
         })
             .fail(function () {
