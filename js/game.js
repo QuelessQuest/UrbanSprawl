@@ -21,6 +21,7 @@ var utils;
 var activeIndex;
 var playerInfo;
 var markers;
+var score;
 var rButton;
 var styleBlack = { font: "16px Arial", fill: "#000000" };
 
@@ -58,6 +59,7 @@ gameState.prototype = {
         loadBoard.then(function(response) {
             log = game.add.text(1, 701, "Loading\nBoard Loaded\n", styleWhite);
             log.setTextBounds(16, 16, 768, 568);
+            score = new Prestige();
             player = new Player(gameId);
             utils = new Utils();
 
