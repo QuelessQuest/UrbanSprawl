@@ -20,7 +20,7 @@ function processBuilding(building, index, array) {
             bY = y;
         }
 
-        drawBuildings[d] = new Building(bX, bY, zoneColors[building.zone], building.owner);
+        drawBuildings[d] = new Building(bX, bY, zoneColors[building.zone], building.owner, 0);
         d++;
     }
 }
@@ -54,7 +54,8 @@ var Board = function (gameId) {
 
     this.pickBuilding = function() {
         for (var i = 0; i < drawBuildings.length; i++) {
-            if (drawBuildings[i].owner == 0) {
+            alert(playerStuff[activeIndex].wealth + "," + drawBuildings[i].cost +"," + drawBuildings[i].owner);
+            if (drawBuildings[i].owner == 0 && drawBuildings[i].cost <= playerStuff[activeIndex].wealth) {
                 drawBuildings[i].sprite.inputEnabled = true;
                 drawBuildings[i].sprite.input.useHandCursor = true;
             }

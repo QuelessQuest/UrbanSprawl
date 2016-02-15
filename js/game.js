@@ -18,8 +18,9 @@ var board;
 var boardSprite;
 var ptab;
 var utils;
-var clickedIndex;
+var activeIndex;
 var playerInfo;
+var styleBlack = { font: "16px Arial", fill: "#000000" };
 
 var gameState = function(game){
     this.board;
@@ -40,6 +41,7 @@ gameState.prototype = {
         game.load.spritesheet('circles', 'images/circles.png', 21, 21);
         game.load.spritesheet('small', 'images/smallbuildings.png', 24, 24);
         game.load.spritesheet('tokens', 'images/tokens.png', 12, 12);
+        game.load.spritesheet('backs', 'images/backs.png', 120, 91);
 
     },
 
@@ -49,7 +51,6 @@ gameState.prototype = {
             boundsAlignH: "left",
             boundsAlignV: "top",
             wordWrap: true, wordWrapWidth: 300 };
-        var styleBlack = { font: "16px Arial", fill: "#000000" };
 
         board = new Board(gameId);
         log = game.add.text(1, 701, "Loading\nBoard Loaded\n", styleWhite);
@@ -70,19 +71,10 @@ gameState.prototype = {
                 ptab[i] = new Tab(i, playerStuff[i].name);
                 if (playerActive == playerStuff[i].id) {
                     ptab[i].makeActive();
-                    clickedIndex = i;
+                    activeIndex = i;
                     ptab[i].select();
                 }
             }
-
-/*            for (var i = 0; i < 4; i++) {
-                ptab[i] = new Tab(i, playerName[i]);
-                if (playerActive == playerNum[i]) {
-                    ptab[i].makeActive();
-                    clickedIndex = i;
-                    ptab[i].select();
-                }
-            }*/
 
             var eButton = game.add.button(607, 647, 'tabs', endTurn, this, 1, 2, 0);
             eButton.addChild(game.make.text(5, 3, "End Turn", styleBlack));
@@ -102,8 +94,12 @@ gameState.prototype = {
         }).then(function(response) {
             log.setText(log.text + response);
 
+            game.add.sprite(780, 640, 'circles', 2);
+            game.add.sprite(747, 258, 'backs', 0);
+            game.add.sprite(747, 358, 'backs', 1);
+
             if (activePlayer && playerPhase == "SETUP") {
-                log.setText(log.text + "Choose an available building to own\n");
+                log.setText(log.text + "Choose an available building to purchase\n");
                 board.pickBuilding();
             }
         });
@@ -116,7 +112,7 @@ gameState.prototype = {
                 drawBuildings[i].lock();
             }
             actionFlag = false;
-            log.setText(log.text + "Building selected. End your turn\n");
+            log.setText(log.text + "Building purchased. End your turn\n");
         }
 
     },

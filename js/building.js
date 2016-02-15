@@ -1,10 +1,11 @@
-var Building = function(x, y, z, o) {
+var Building = function(x, y, z, o, c) {
 
     this.owner = o;
     this.zone = z;
     var building = this;
     this.bX = x;
     this.bY = y;
+    this.cost = c;
 
     this.sprite = game.add.sprite(x, y, 'small', building.zone);
 

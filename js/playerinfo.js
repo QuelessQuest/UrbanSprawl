@@ -2,15 +2,19 @@ var PlayerInfo = function() {
 
     var playerInfo = this;
     this.pColor = [];
-    game.add.sprite(720, 50, 'circles', 1);
+    this.wealth = [];
+    this.wCircle = game.add.sprite(720, 50, 'circles', 1);
 
     var init = function() {
-        playerInfo.pColor[0] = game.add.sprite(700, 55, 'tokens', parseInt(playerStuff[0].color, 10));
-        playerInfo.pColor[1] = game.add.sprite(700, 55, 'tokens', parseInt(playerStuff[1].color, 10));
-        playerInfo.pColor[2] = game.add.sprite(700, 55, 'tokens', parseInt(playerStuff[2].color, 10));
-        playerInfo.pColor[3] = game.add.sprite(700, 55, 'tokens', parseInt(playerStuff[3].color, 10));
+        for (var j = 0; j < 4; j++) {
+            playerInfo.pColor[j] = game.add.sprite(700, 55, 'tokens', parseInt(playerStuff[j].color, 10));
+            playerInfo.wealth[j] = game.make.text(30, 1, playerStuff[j].wealth.toString(), styleBlack);
+            playerInfo.wCircle.addChild(playerInfo.wealth[j]);
+        }
+
         for (var i = 0; i < playerInfo.pColor.length; i++) {
             playerInfo.pColor[i].visible = false;
+            playerInfo.wealth[i].visible = false;
         }
     };
 
@@ -18,9 +22,11 @@ var PlayerInfo = function() {
         for (var i = 0; i < playerInfo.pColor.length; i++) {
             if (i != index) {
                 playerInfo.pColor[i].visible = false;
+                playerInfo.wealth[i].visible = false;
             }
         }
         playerInfo.pColor[index].visible = true;
+        playerInfo.wealth[index].visible = true;
     };
 
     init();

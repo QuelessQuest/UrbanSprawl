@@ -1,8 +1,6 @@
 var playerStuff = [];
-//var playerName = [];
 var playerActive = "";
 var playerPhase = "";
-//var playerColor = [];
 
 var Player = function (gameId) {
 
