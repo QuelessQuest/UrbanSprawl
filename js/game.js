@@ -20,6 +20,8 @@ var ptab;
 var utils;
 var activeIndex;
 var playerInfo;
+var callout;
+var calloutText;
 var styleBlack = { font: "16px Arial", fill: "#000000" };
 
 var gameState = function(game){
@@ -42,7 +44,7 @@ gameState.prototype = {
         game.load.spritesheet('small', 'images/smallbuildings.png', 24, 24);
         game.load.spritesheet('tokens', 'images/tokens.png', 12, 12);
         game.load.spritesheet('backs', 'images/backs.png', 120, 91);
-
+        game.load.spritesheet('callouts', 'images/callout.png', 68, 63);
     },
 
     create: function () {
@@ -52,58 +54,66 @@ gameState.prototype = {
             boundsAlignV: "top",
             wordWrap: true, wordWrapWidth: 300 };
 
-        board = new Board(gameId);
-        log = game.add.text(1, 701, "Loading\nBoard Loaded\n", styleWhite);
-        log.setTextBounds(16, 16, 768, 568);
-        player = new Player(gameId);
-        utils = new Utils();
+        var loadBoard = new LoadBoard();
+        loadBoard.then(function(response) {
+            log = game.add.text(1, 701, "Loading\nBoard Loaded\n", styleWhite);
+            log.setTextBounds(16, 16, 768, 568);
+            player = new Player(gameId);
+            utils = new Utils();
 
-        boardSprite = game.add.button(0, 0, 'board');
+            boardSprite = game.add.button(0, 0, 'board');
 
-        ptab = [];
+            ptab = [];
 
-        player.then(function(response) {
-            log.setText(log.text + response);
+            player.then(function (response) {
+                log.setText(log.text + response);
+                playerInfo = new PlayerInfo();
 
-            playerInfo = new PlayerInfo();
+                board = new Board(gameId);
+                board.create();
 
-            for (var i = 0; i < 4; i++) {
-                ptab[i] = new Tab(i, playerStuff[i].name);
-                if (playerActive == playerStuff[i].id) {
-                    ptab[i].makeActive();
-                    activeIndex = i;
-                    ptab[i].select();
+                callout = game.add.sprite(0, 0, 'callouts', 0);
+                callout.visible = false;
+                calloutText = game.make.text(10, 10, "$ 0", styleBlack);
+                callout.addChild(calloutText);
+
+                for (var i = 0; i < 4; i++) {
+                    ptab[i] = new Tab(i, playerStuff[i].name);
+                    if (playerActive == playerStuff[i].id) {
+                        ptab[i].makeActive();
+                        activeIndex = i;
+                        ptab[i].select();
+                    }
                 }
-            }
 
-            var eButton = game.add.button(607, 647, 'tabs', endTurn, this, 1, 2, 0);
-            eButton.addChild(game.make.text(5, 3, "End Turn", styleBlack));
-            var rButton = game.add.button(223, 647, 'tabs', utils.resetTurn, this, 1, 2, 0);
-            rButton.addChild(game.make.text(5, 3, "Reset Turn", styleBlack));
+                var eButton = game.add.button(607, 647, 'tabs', endTurn, this, 1, 2, 0);
+                eButton.addChild(game.make.text(5, 3, "End Turn", styleBlack));
+                var rButton = game.add.button(223, 647, 'tabs', utils.resetTurn, this, 1, 2, 0);
+                rButton.addChild(game.make.text(5, 3, "Reset Turn", styleBlack));
 
-            var resp = "";
-            if (playerActive == playerId) {
-                resp += "It is your turn\n";
-                activePlayer = true;
-            } else {
-                resp += "You are not the active player\n";
-            }
+                var resp = "";
+                if (playerActive == playerId) {
+                    resp += "It is your turn\n";
+                    activePlayer = true;
+                } else {
+                    resp += "You are not the active player\n";
+                }
 
-            return resp;
+                return resp;
 
-        }).then(function(response) {
-            log.setText(log.text + response);
+            }).then(function (response) {
+                log.setText(log.text + response);
 
-            game.add.sprite(780, 640, 'circles', 2);
-            game.add.sprite(747, 258, 'backs', 0);
-            game.add.sprite(747, 358, 'backs', 1);
+                game.add.sprite(780, 640, 'circles', 2);
+                game.add.sprite(747, 258, 'backs', 0);
+                game.add.sprite(747, 358, 'backs', 1);
 
-            if (activePlayer && playerPhase == "SETUP") {
-                log.setText(log.text + "Choose an available building to purchase\n");
-                board.pickBuilding();
-            }
+                if (activePlayer && playerPhase == "SETUP") {
+                    log.setText(log.text + "Choose an available building to purchase\n");
+                    board.pickBuilding();
+                }
+            });
         });
-
     },
 
     update: function () {

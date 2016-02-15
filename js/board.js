@@ -19,7 +19,6 @@ function processBuilding(building, index, array) {
         } else {
             bY = y;
         }
-
         drawBuildings[d] = new Building(bX, bY, zoneColors[building.zone], building.owner, 0);
         d++;
     }
@@ -37,12 +36,8 @@ function processRow(row, index, array) {
 
 var Board = function (gameId) {
 
-    var init = function() {
-        $.get("http://localhost:8111/game/load/1/CityRows", function (data) {
-            data.forEach(processRow);
-        }).fail(function () {
-            alert("Sorry");
-        });
+    this.create = function() {
+        rowData.forEach(processRow);
     };
 
     this.destroy = function() {
@@ -54,7 +49,6 @@ var Board = function (gameId) {
 
     this.pickBuilding = function() {
         for (var i = 0; i < drawBuildings.length; i++) {
-            alert(playerStuff[activeIndex].wealth + "," + drawBuildings[i].cost +"," + drawBuildings[i].owner);
             if (drawBuildings[i].owner == 0 && drawBuildings[i].cost <= playerStuff[activeIndex].wealth) {
                 drawBuildings[i].sprite.inputEnabled = true;
                 drawBuildings[i].sprite.input.useHandCursor = true;
@@ -62,6 +56,5 @@ var Board = function (gameId) {
         }
     };
 
-    init();
 };
 

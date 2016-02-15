@@ -16,28 +16,39 @@ var Building = function(x, y, z, o, c) {
     };
 
     var rollOver = function () {
+        callout.x = building.bX - 25;
+        callout.y = building.bY - 63;
+        callout.visible = true;
         var tween = game.add.tween(building.sprite);
         tween.to({x:building.bX-3, y:building.bY-3}, 100, Phaser.Easing.Exponential.easeOut);
         tween.start();
+
     };
 
     var rollOut = function () {
         var tween = game.add.tween(building.sprite);
         tween.to({x:building.bX, y:building.bY}, 100, Phaser.Easing.Exponential.easeOut);
         tween.start();
+        callout.visible = false;
     };
 
     var click = function () {
         if (building.owner == 0) {
+            building.sprite.inputEnabled = false;
             var ownerSprite = game.make.sprite(7, 7, 'tokens', 0);
             building.sprite.addChild(ownerSprite);
             building.owner = playerActive;
+            callout.visible = false;
+            var tween = game.add.tween(building.sprite);
+            tween.to({x:building.bX, y:building.bY}, 100, Phaser.Easing.Exponential.easeOut);
+            tween.start();
             actionFlag = true;
         }
 
     };
 
     this.lock = function() {
+        building.sprite.input.useHandCursor = false;
         building.sprite.inputEnabled = false;
     };
 
