@@ -6,7 +6,7 @@ var Player = function (gameId) {
 
     return new Promise(function (resolve, reject) {
 
-        $.get("http://localhost:8111/game/load/1/Players", function (data) {
+        $.get("http://localhost:8111/game/load/" + gameId + "/Players", function (data) {
                 /*
                  {"activePlayer":1,
                  "phase":"SETUP",

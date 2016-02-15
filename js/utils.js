@@ -1,6 +1,6 @@
 var Utils = function() {
 
-    this.resetTurn = function () {
+    this.resetTurn = function() {
         log = "";
         boardSprite.destroy();
         board.destroy();
@@ -11,6 +11,13 @@ var Utils = function() {
         location.reload(true);
     };
 
-    this.playerTabClick = function() {
+    this.endTurn = function() {
+        ptab[activeIndex].sprite.removeChildAt(1);
+        activeIndex++;
+        if (activeIndex > 3) activeIndex = 0;
+        playerActive = playerStuff[activeIndex].id;
+        ptab[activeIndex].makeActive();
+        ptab[activeIndex].select();
+        rButton.visible = false;
     };
 };

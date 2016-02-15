@@ -1,10 +1,10 @@
-var rowData;
-var columnData;
+var rowData = [];
+var columnData = [];
 
-var LoadBoard = function() {
+var LoadBoard = function(gameId) {
     return new Promise(function(resolve, reject) {
         var cd = new Promise(function(resolve, reject) {
-            $.get("http://localhost:8111/game/load/1/CityColumns", function(data) {
+            $.get("http://localhost:8111/game/load/" + gameId + "/CityColumns", function(data) {
                 columnData = data;
                 resolve("Loaded");
             }).fail(function() {
@@ -12,7 +12,7 @@ var LoadBoard = function() {
             });
         });
         cd.then(function(response) {
-            $.get("http://localhost:8111/game/load/1/CityRows", function (data) {
+            $.get("http://localhost:8111/game/load/" + gameId + "/CityRows", function (data) {
                 rowData = data;
                 resolve("Loaded");
             }).fail(function () {

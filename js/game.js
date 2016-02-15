@@ -1,10 +1,10 @@
 var gameProperties = {
     screenWidth: 1280,
-    screenHeight: 960,
+    screenHeight: 960
 };
 
 var states = {
-    game: "game",
+    game: "game"
 };
 
 var gameId = 1;
@@ -20,8 +20,8 @@ var ptab;
 var utils;
 var activeIndex;
 var playerInfo;
-var callout;
-var calloutText;
+var markers;
+var rButton;
 var styleBlack = { font: "16px Arial", fill: "#000000" };
 
 var gameState = function(game){
@@ -54,7 +54,7 @@ gameState.prototype = {
             boundsAlignV: "top",
             wordWrap: true, wordWrapWidth: 300 };
 
-        var loadBoard = new LoadBoard();
+        var loadBoard = new LoadBoard(gameId);
         loadBoard.then(function(response) {
             log = game.add.text(1, 701, "Loading\nBoard Loaded\n", styleWhite);
             log.setTextBounds(16, 16, 768, 568);
@@ -69,13 +69,10 @@ gameState.prototype = {
                 log.setText(log.text + response);
                 playerInfo = new PlayerInfo();
 
-                board = new Board(gameId);
+                board = new Board();
                 board.create();
 
-                callout = game.add.sprite(0, 0, 'callouts', 0);
-                callout.visible = false;
-                calloutText = game.make.text(10, 10, "$ 0", styleBlack);
-                callout.addChild(calloutText);
+                markers = new Markers();
 
                 for (var i = 0; i < 4; i++) {
                     ptab[i] = new Tab(i, playerStuff[i].name);
@@ -86,9 +83,9 @@ gameState.prototype = {
                     }
                 }
 
-                var eButton = game.add.button(607, 647, 'tabs', endTurn, this, 1, 2, 0);
+                var eButton = game.add.button(607, 647, 'tabs', utils.endTurn, this, 1, 2, 0);
                 eButton.addChild(game.make.text(5, 3, "End Turn", styleBlack));
-                var rButton = game.add.button(223, 647, 'tabs', utils.resetTurn, this, 1, 2, 0);
+                rButton = game.add.button(223, 647, 'tabs', utils.resetTurn, this, 1, 2, 0);
                 rButton.addChild(game.make.text(5, 3, "Reset Turn", styleBlack));
 
                 var resp = "";
@@ -118,20 +115,15 @@ gameState.prototype = {
 
     update: function () {
         if (playerPhase == "SETUP" && actionFlag) {
-            for (var i = 0; i < drawBuildings.length; i++) {
-                drawBuildings[i].lock();
-            }
+            board.lock();
             actionFlag = false;
             log.setText(log.text + "Building purchased. End your turn\n");
         }
-
     },
 
     render: function() {
     }
 };
-
-function endTurn() {}
 
 var game = new Phaser.Game(gameProperties.screenWidth, gameProperties.screenHeight, Phaser.AUTO, 'gameDiv');
 game.state.add(states.game, gameState);
