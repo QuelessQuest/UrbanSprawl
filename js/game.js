@@ -26,6 +26,7 @@ var rButton;
 var aps;
 var styleBlack = { font: "16px Arial", fill: "#000000" };
 var styleBigBlack = { font: "32px Arial", fill: "#000000" };
+var permitGroups = [];
 
 
 var gameState = function(game){
@@ -49,6 +50,7 @@ gameState.prototype = {
         game.load.spritesheet('tokens', 'images/tokens.png', 12, 12);
         game.load.spritesheet('backs', 'images/backs.png', 120, 91);
         game.load.spritesheet('callouts', 'images/callout.png', 68, 63);
+        game.load.image('blankCard', 'images/blankCard.png');
     },
 
     create: function () {
@@ -92,6 +94,24 @@ gameState.prototype = {
                 eButton.addChild(game.make.text(5, 3, "End Turn", styleBlack));
                 rButton = game.add.button(223, 647, 'tabs', utils.resetTurn, this, 1, 2, 0);
                 rButton.addChild(game.make.text(5, 3, "Reset Turn", styleBlack));
+
+                var zoomGroup = game.add.group();
+                zoomGroup.addChild(game.make.image(1088, 5, 'blankCard'));
+
+                // Card Setup HERE
+                for (var p = 0; p < 5; p++) {
+                    permitGroups[p] = game.add.group();
+                    var scaledImage = game.make.image(31, 668 - (p * 104), 'blankCard');
+                    scaledImage.scale = {x :.45, y :.45};
+                    scaledImage.angle = -90;
+                    permitGroups[p].addChild(scaledImage);
+                }
+                permitGroups[5] = game.add.group();
+                var scaledImage = game.make.image(47, 15, 'blankCard');
+                scaledImage.scale = {x :.45, y :.45};
+                permitGroups[5].addChild(scaledImage);
+
+                permitGroups[3].visible = false;
 
                 var resp = "";
                 if (playerActive == playerId) {

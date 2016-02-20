@@ -7,3 +7,17 @@
   {"name":"Fire Station","permits":1,"election":false,"wealth":0,"prestige":0,
   "vocations":[{"name":"Public Service","value":1}],"effect":" ","permitType":[2]}]
  */
+var Cards = function() {
+
+    var cards = this;
+    this.cardData = [];
+
+    this.getCards = function(gameId, deck, items) {
+
+        var loadCards = new LoadCards(gameId, deck, items);
+        loadCards.then(function(cardsReturned) {
+            cards.cardData = cardsReturned;
+        });
+    }
+
+};
