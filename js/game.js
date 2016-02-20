@@ -23,7 +23,10 @@ var playerInfo;
 var markers;
 var score;
 var rButton;
+var aps;
 var styleBlack = { font: "16px Arial", fill: "#000000" };
+var styleBigBlack = { font: "32px Arial", fill: "#000000" };
+
 
 var gameState = function(game){
     this.board;
@@ -106,11 +109,11 @@ gameState.prototype = {
                 game.add.sprite(780, 640, 'circles', 2);
                 game.add.sprite(747, 258, 'backs', 0);
                 game.add.sprite(747, 358, 'backs', 1);
+                game.add.sprite(747, 155, 'backs', 2);
+                aps = game.add.text(783, 507, '6', styleBigBlack);
 
-                if (activePlayer && playerPhase == "SETUP") {
-                    log.setText(log.text + "Choose an available building to purchase\n");
-                    board.pickBuilding();
-                }
+                var logic = new Logic();
+                logic.performGamePhase(activePlayer, playerPhase);
             });
         });
     },

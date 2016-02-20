@@ -155,6 +155,19 @@ var Board = function() {
                 }
             }
         }
-
     };
+
+    this.availableBuilding = function() {
+        for (var r = 0; r < board.row.length; r++) {
+            for (var b = 0; b < board.row[r].blocks.length; b++) {
+                for (var bd = 0; bd < board.row[r].blocks[b].buildings.length; bd++) {
+                    if (board.row[r].blocks[b].buildings[bd].owner == 0 &&
+                        (board.row[r].blocks[b].wealth + board.row[r].blocks[b].prestige <= playerStuff[activeIndex].wealth)) {
+                            return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 };
