@@ -99,19 +99,7 @@ gameState.prototype = {
                 zoomGroup.addChild(game.make.image(1088, 5, 'blankCard'));
 
                 // Card Setup HERE
-                for (var p = 0; p < 5; p++) {
-                    permitGroups[p] = game.add.group();
-                    var scaledImage = game.make.image(31, 668 - (p * 104), 'blankCard');
-                    scaledImage.scale = {x :.45, y :.45};
-                    scaledImage.angle = -90;
-                    permitGroups[p].addChild(scaledImage);
-                }
-                permitGroups[5] = game.add.group();
-                var scaledImage = game.make.image(47, 15, 'blankCard');
-                scaledImage.scale = {x :.45, y :.45};
-                permitGroups[5].addChild(scaledImage);
-
-                permitGroups[3].visible = false;
+                var permits = new Permits();
 
                 var resp = "";
                 if (playerActive == playerId) {
