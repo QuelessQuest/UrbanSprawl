@@ -25,9 +25,8 @@ var score;
 var rButton;
 var aps;
 var styleBlack = { font: "16px Arial", fill: "#000000" };
+var styleSmallBlack = { font: "14px Arial", fill: "#000000" };
 var styleBigBlack = { font: "32px Arial", fill: "#000000" };
-var permitGroups = [];
-
 
 var gameState = function(game){
     this.board;
@@ -69,7 +68,6 @@ gameState.prototype = {
             utils = new Utils();
 
             boardSprite = game.add.button(0, 0, 'board');
-
             ptab = [];
 
             player.then(function (response) {
@@ -80,6 +78,8 @@ gameState.prototype = {
                 board.create();
 
                 markers = new Markers();
+
+                var zoom = new Zoom(1088, 5);
 
                 for (var i = 0; i < 4; i++) {
                     ptab[i] = new Tab(i, playerStuff[i].name);
@@ -95,15 +95,12 @@ gameState.prototype = {
                 rButton = game.add.button(223, 647, 'tabs', utils.resetTurn, this, 1, 2, 0);
                 rButton.addChild(game.make.text(5, 3, "Reset Turn", styleBlack));
 
-                var zoomGroup = game.add.group();
-                zoomGroup.addChild(game.make.image(1088, 5, 'blankCard'));
-
                 // Card Setup HERE
                 var permits = [];
                 for (var p = 0; p < 5; p++) {
-                    permits[p] = new Permit(31, 668 - (p * 104));
+                    permits[p] = new Permit(31, 668 - (p * 104), zoom);
                 }
-                permits[5] = new Permit(47, 15, false);
+                permits[5] = new Permit(47, 15, zoom, false);
 
                 var resp = "";
                 if (playerActive == playerId) {
