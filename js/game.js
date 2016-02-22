@@ -24,6 +24,7 @@ var markers;
 var score;
 var rButton;
 var aps;
+var apCount;
 var styleBlack = { font: "16px Arial", fill: "#000000" };
 var styleSmallBlack = { font: "14px Arial", fill: "#000000" };
 var styleBigBlack = { font: "32px Arial", fill: "#000000" };
@@ -98,9 +99,9 @@ gameState.prototype = {
                 // Card Setup HERE
                 var permits = [];
                 for (var p = 0; p < 5; p++) {
-                    permits[p] = new Permit(31, 668 - (p * 104), zoom);
+                    permits[p] = new Permit(31, 668 - (p * 104), zoom, p + 1);
                 }
-                permits[5] = new Permit(47, 15, zoom, false);
+                permits[5] = new Permit(47, 15, zoom, 0, false);
 
                 var resp = "";
                 if (playerActive == playerId) {
@@ -120,6 +121,7 @@ gameState.prototype = {
                 game.add.sprite(747, 358, 'backs', 1);
                 game.add.sprite(747, 155, 'backs', 2);
                 aps = game.add.text(783, 507, '6', styleBigBlack);
+                apCount = 6;
 
                 var logic = new Logic();
                 logic.performGamePhase(activePlayer, playerPhase);
