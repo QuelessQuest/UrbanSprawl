@@ -99,7 +99,11 @@ gameState.prototype = {
                 zoomGroup.addChild(game.make.image(1088, 5, 'blankCard'));
 
                 // Card Setup HERE
-                var permits = new Permits();
+                var permits = [];
+                for (var p = 0; p < 5; p++) {
+                    permits[p] = new Permit(31, 668 - (p * 104));
+                }
+                permits[5] = new Permit(47, 15, false);
 
                 var resp = "";
                 if (playerActive == playerId) {
