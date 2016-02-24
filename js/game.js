@@ -25,6 +25,7 @@ var score;
 var rButton;
 var aps;
 var apCount;
+var allCards;
 var styleBlack = { font: "16px Arial", fill: "#000000" };
 var styleSmallBlack = { font: "14px Arial", fill: "#000000" };
 var styleBigBlack = { font: "32px Arial", fill: "#000000" };
@@ -68,7 +69,7 @@ gameState.prototype = {
             player = new Player(gameId);
             utils = new Utils();
 
-            boardSprite = game.add.button(0, 0, 'board');
+            boardSprite = game.add.image(0, 0, 'board');
             ptab = [];
 
             player.then(function (response) {
@@ -79,6 +80,7 @@ gameState.prototype = {
                 board.create();
 
                 markers = new Markers();
+                allCards = new AllCards();
 
                 var zoom = new Zoom(1088, 5);
 
