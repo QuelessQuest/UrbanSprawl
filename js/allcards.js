@@ -9,16 +9,12 @@
  */
 var AllCards = function() {
 
-    var allCards = this;
-    this.cardData = [];
-
-    var init = function() {
-
-        var loadAllCards = new LoadAllCards();
-        loadAllCards.then(function(cardsReturned) {
-            allCards.cardData = cardsReturned;
+    return new Promise(function (resolve, reject) {
+        $.get("http://localhost:8111/game/load/1/AllCards", function (data) {
+            allCards = data;
+            resolve("Loaded");
+        }).fail(function () {
+            reject(Error("Sorry"));
         });
-    }
-
-    init();
+    });
 };

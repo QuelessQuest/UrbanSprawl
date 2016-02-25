@@ -25,11 +25,15 @@ var score;
 var rButton;
 var aps;
 var apCount;
-var allCards;
+var dialog;
+var allCards = [];
 var styleBlack = { font: "16px Arial", fill: "#000000" };
 var styleSmallBlack = { font: "14px Arial", fill: "#000000" };
 var styleBigBlack = { font: "32px Arial", fill: "#000000" };
-
+var styleWhite = { font: "16px Arial", fill: "#fff",
+    align: "center",
+    boundsAlignH: "center",
+    boundsAlignV: "top" };
 var gameState = function(game){
     this.board;
     this.player;
@@ -51,16 +55,15 @@ gameState.prototype = {
         game.load.spritesheet('tokens', 'images/tokens.png', 12, 12);
         game.load.spritesheet('backs', 'images/backs.png', 120, 91);
         game.load.spritesheet('callouts', 'images/callout.png', 68, 63);
+        game.load.spritesheet('ok', 'images/ok.png', 54, 22);
+        game.load.spritesheet('btns', 'images/btns.png', 87, 21);
         game.load.image('blankCard', 'images/blankCard.png');
+        game.load.image('playerpermits', 'images/playerpermits.png');
+        game.load.spritesheet('smallpermit', 'images/smallpermit.png', 14, 14);
+        game.load.image('dialog', 'images/dialog.png');
     },
 
     create: function () {
-        var styleWhite = { font: "16px Arial", fill: "#fff",
-            align: "left",
-            boundsAlignH: "left",
-            boundsAlignV: "top",
-            wordWrap: true, wordWrapWidth: 300 };
-
         var loadBoard = new LoadBoard(gameId);
         loadBoard.then(function(response) {
             log = game.add.text(1, 701, "Loading\nBoard Loaded\n", styleWhite);
@@ -68,65 +71,66 @@ gameState.prototype = {
             score = new Prestige();
             player = new Player(gameId);
             utils = new Utils();
+            var ac = new AllCards();
 
             boardSprite = game.add.image(0, 0, 'board');
             ptab = [];
+            ac.then(function (response) {
+                player.then(function (response) {
+                    log.setText(log.text + response);
+                    playerInfo = new PlayerInfo();
 
-            player.then(function (response) {
-                log.setText(log.text + response);
-                playerInfo = new PlayerInfo();
+                    board = new Board();
+                    board.create();
 
-                board = new Board();
-                board.create();
+                    markers = new Markers();
 
-                markers = new Markers();
-                allCards = new AllCards();
+                    var zoom = new Zoom(1088, 5);
 
-                var zoom = new Zoom(1088, 5);
-
-                for (var i = 0; i < 4; i++) {
-                    ptab[i] = new Tab(i, playerStuff[i].name);
-                    if (playerActive == playerStuff[i].id) {
-                        ptab[i].makeActive();
-                        activeIndex = i;
-                        ptab[i].select();
+                    for (var i = 0; i < 4; i++) {
+                        ptab[i] = new Tab(i, playerStuff[i].name);
+                        if (playerActive == playerStuff[i].id) {
+                            ptab[i].makeActive();
+                            activeIndex = i;
+                            ptab[i].select();
+                        }
                     }
-                }
 
-                var eButton = game.add.button(607, 647, 'tabs', utils.endTurn, this, 1, 2, 0);
-                eButton.addChild(game.make.text(5, 3, "End Turn", styleBlack));
-                rButton = game.add.button(223, 647, 'tabs', utils.resetTurn, this, 1, 2, 0);
-                rButton.addChild(game.make.text(5, 3, "Reset Turn", styleBlack));
+                    var eButton = game.add.button(607, 647, 'tabs', utils.endTurn, this, 1, 2, 0);
+                    eButton.addChild(game.make.text(5, 3, "End Turn", styleBlack));
+                    rButton = game.add.button(223, 647, 'tabs', utils.resetTurn, this, 1, 2, 0);
+                    rButton.addChild(game.make.text(5, 3, "Reset Turn", styleBlack));
 
-                // Card Setup HERE
-                var permits = [];
-                for (var p = 0; p < 5; p++) {
-                    permits[p] = new Permit(31, 668 - (p * 104), zoom, p + 1);
-                }
-                permits[5] = new Permit(47, 15, zoom, 0, false);
+                    // Card Setup HERE
+                    var permits = [];
+                    for (var p = 0; p < 5; p++) {
+                        permits[p] = new Permit(31, 668 - (p * 104), zoom, p + 1);
+                        permits[p].lock();
+                    }
+                    permits[5] = new Permit(47, 15, zoom, 0, false);
+                    permits[5].lock();
 
-                var resp = "";
-                if (playerActive == playerId) {
-                    resp += "It is your turn\n";
-                    activePlayer = true;
-                } else {
-                    resp += "You are not the active player\n";
-                }
+                    if (playerActive == playerId) {
+                        activePlayer = true;
+                    }
 
-                return resp;
+                    return "";
 
-            }).then(function (response) {
-                log.setText(log.text + response);
+                }).then(function (response) {
+                    log.setText(log.text + response);
 
-                game.add.sprite(780, 640, 'circles', 2);
-                game.add.sprite(747, 258, 'backs', 0);
-                game.add.sprite(747, 358, 'backs', 1);
-                game.add.sprite(747, 155, 'backs', 2);
-                aps = game.add.text(783, 507, '6', styleBigBlack);
-                apCount = 6;
+                    game.add.sprite(780, 640, 'circles', 2);
+                    game.add.sprite(747, 258, 'backs', 0);
+                    game.add.sprite(747, 358, 'backs', 1);
+                    game.add.sprite(747, 155, 'backs', 2);
+                    aps = game.add.text(783, 507, '6', styleBigBlack);
+                    apCount = 6;
 
-                var logic = new Logic();
-                logic.performGamePhase(activePlayer, playerPhase);
+                    dialog = new Dialog();
+
+                    var logic = new Logic();
+                    logic.performGamePhase(activePlayer, playerPhase);
+                });
             });
         });
     },
@@ -135,7 +139,7 @@ gameState.prototype = {
         if (playerPhase == "SETUP" && actionFlag) {
             board.lock();
             actionFlag = false;
-            log.setText(log.text + "Building purchased. End your turn\n");
+            dialog.setText(playerPhase + "\n\nYou have purchased a building.\nYou may now end your turn.\n", false, true, true);
         }
     },
 

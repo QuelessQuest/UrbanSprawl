@@ -3,8 +3,12 @@ var Logic = function() {
     this.performGamePhase = function(active, phase) {
 
         if (active && phase == "SETUP") {
-            log.setText(log.text + "Choose an available building to purchase\n");
-            board.pickBuilding();
+            dialog.setText(phase + "\n\nIt is your turn.\nChoose an available building to purchase.\n");
+            dialog.setButton(board.pickBuilding);
+        }
+        if (!active) {
+            dialog.setText(phase + "\n\nIt is not your turn.\nYou have no pending actions to resolve.\n");
+            dialog.setButton(dialog.close);
         }
     };
 

@@ -144,6 +144,7 @@ var Board = function() {
     };
 
     this.pickBuilding = function() {
+        dialog.popup.visible = false;
         for (var r = 0; r < board.row.length; r++) {
             for (var b = 0; b < board.row[r].blocks.length; b++) {
                 for (var bd = 0; bd < board.row[r].blocks[b].buildings.length; bd++) {

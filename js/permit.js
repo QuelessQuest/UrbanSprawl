@@ -66,5 +66,9 @@ var Permit = function (x, y, zoom, a, r) {
         aps.setText(apCount);
     };
 
+    this.lock = function() {
+        permit.scaledImage.inputEnabled = false;
+    };
+
     init();
 };
